@@ -1,13 +1,21 @@
-OriginalData <- read.table("household_power_consumption.txt", sep=";", 
-                           header=TRUE,colClasses = c("character", "character", rep("numeric", 7)),
+# This will read the data and assign the classes to the variables within the table provided.
+# The first two classes are labeled as 'character' for the filtering process coming up.
+OriginalData <- read.table("household_power_consumption.txt", sep=";", header=TRUE,
+                           colClasses = c("character", "character", rep("numeric", 7)),
                            na.strings = "?")
 
+# This converts the character two classes for the date and time of the data to a date-based
+# class where we could filter through it later.
 OriginalData$Time <- strptime(paste(OriginalData$Date, OriginalData$Time), "%d/%m/%Y %H:%M:%S")
 OriginalData$Date <- as.Date(OriginalData$Date, format="%d/%m/%Y")
 
+# This filters through the dates to specify the two days we are interested in.
 data <- subset(OriginalData, Date >= as.Date("2007-02-01") & Date <= as.Date("2007-02-02"))
 
-hist(data$Global_active_power, col = "red", main = "Global Active Power", xlab = "Global Active Power (kilowatts)")
+# Plots the histogram for the frequency of Global Active Power with the respective labels.
+hist(data$Global_active_power, col = "red", main = "Global Active Power", 
+     xlab = "Global Active Power (kilowatts)")
 
+# Saves the copy of the first plot at the right scale and closes the PNG device.
 dev.copy(png, file = "plot1.png", width = 480, height = 480)
 dev.off()
